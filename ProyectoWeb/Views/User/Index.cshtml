@@ -1,0 +1,423 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+<div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">Lista de Usuarios</h2>
+        </div>
+        <div class="col-6 text-end">
+            <button class="btn btn-primary buttonTitle me-1" onclick="nuevoUsuario()">
+                <i class="fa-solid fa-user-plus"></i> Nuevo Usuario
+            </button>
+            @*<a  class="btn btn-primary">
+                <i class="fa-solid fa-user-plus"></i>   Nuevo Usuario
+            </a>*@
+        </div>
+    </div>
+    <br/>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-12">
+            <table id="tblUser" class="table table-striped" style="width:100% !important">
+                <thead class="table-sena">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombres</th>
+                        <th scope="col">Fecha Nacimiento</th>
+                        <th scope="col">Sexo</th>
+                        <th scope="col">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpoUsers">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+@*modla Nuevo Usuario*@
+<div class="modal fade" id="modalUsers" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="1" role="dialog" aria-labelledby="modalUsersLabel" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                    <h5 class="modal-title" id="idTituloModalUsers">Nuevo Usuario</h5>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="recipient-name" class="col-form-label">Nombres</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="txtName"
+                                   placeholder="Nombres"
+                                   required
+                                   maxlength="30"
+                                   style="text-transform: capitalize ;"
+                                   onkeypress="return soloLetras(event)"/>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="recipient-name" class="col-form-label">Fecha Nacimiento</label>
+                            <input type="date"
+                                   class="form-control"
+                                   id="txtDateBorn"
+                                   placeholder="Fecha Nacimiento"
+                                   required/>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="recipient-name" class="col-form-label">Sexo </label>
+                            @*<select class="form-control"
+                            asp-items="@ViewBag.listSexos"
+                            id="cmbSexos"
+                            style="width: 100%;">
+                            <option disabled selected> --Seleccione Sexo</option>
+                            </select>*@
+                            <select class="form-control"
+                                    id="cmbSexos"
+                                    style="width: 100%;"
+                                    onchange="selectSexo()">
+                                <option disabled selected> --Seleccione Sexo</option>
+                            </select>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" onclick="limpiarForm()">
+                    <i class="fas fa-window-close"></i>
+                    Cancelar
+                </button>
+                <button type="button" class="btn btn-success" onclick="guardarUser()">
+                    <i class="far fa-save"></i>
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript" charset="utf-8">
+        var listaUsers = [];
+        var listaSexos = [];
+        //const client_token = "@ViewBag.ClientToken";
+        //console.log(listaSexos);
+        let idUser = '';
+        let sexo = '';
+        let sexoValue ='';
+        $(document).ready(function () {
+            getAllUser();
+            getAllSexos();
+            
+
+        });
+        function getAllUser() {
+            modalProcesando(true);
+            $.ajax({
+                url: '@Url.Action("GetAllUser", "User")',
+                method: 'GET',
+                dataType: "json",
+                success: function (data) {
+                    modalProcesando(false);
+                    console.log(data);
+                    if (data.isSuccess) {
+                        listaUsers = data.result;
+                        loadGrid(listaUsers);
+                        console.log(listaUsers);
+                    } else {
+                        Swal.fire(
+                            'Opps!',
+                            data.message,
+                            'error');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    modalProcesando(false);
+                    console.error(xhr, textStatus, errorThrown);
+                }
+            });
+        }
+
+        function loadGrid(data) {
+            //llenar registro
+            if ($.fn.dataTable.isDataTable('#tblUser')) {
+                var table = $('#tblUser').DataTable();
+                table.destroy();
+                cargarGridUsers(data);
+                llenarGridDataTable('tblUser');
+            }
+            else {
+                cargarGridUsers(data);
+                llenarGridDataTable('tblUser');
+            }
+        }
+        function cargarGridUsers(data) {
+            console.log('Llamada', data);
+
+            $("#cuerpoUsers").html("");
+
+            for (var i = 0; i < data.length; i++) {
+                var tr = `
+                 <tr>
+                            <th>`+ data[i].idUser + `</th>
+                            <th> `+ data[i].nombre + `</th>
+                            <th> `+ data[i].strFecha_Nacimiento + `</th>
+                            <th> `+ data[i].sexoGeneral + `</th>
+                <td>
+                                   <button  class="btn btn-warning" onclick="editarUser(`+ data[i].idUser + `)"><i class="fas fa-user-edit"></i> Editar</button>
+                                   <button class="btn btn-danger" onclick="eliminarUser(`+ data[i].idUser + `)"><i class="fas fa-user-minus"></i> Eliminar</button>
+                 </td>
+                </tr>
+                 `;
+                $("#cuerpoUsers").append(tr);
+            }
+        }
+        function limpiarForm() {
+                $("#txtName").val('');
+                $("#txtDateBorn").val('');
+                $("#cmbSexos").val('');
+                idUser = '';
+            }
+
+        function nuevoUsuario() {
+            //limpiarForm();
+
+            const modalUSer = new bootstrap.Modal('#modalUsers', {
+                keyboard: true
+            });
+            modalUSer.show();
+        }
+        function validarForm() {
+
+            if ($("#txtName").val() == '') {
+                $("#txtName").focus();
+                toastMessage('warning', 'El nombre es obligatorio.');
+                return false;
+            }
+
+            if ($("#txtDateBorn").val() == '') {
+                $("#txtDateBorn").focus();
+                toastMessage('warning', 'La fecha obligatorio.');
+                return false;
+            }
+
+            if (sexoValue == '') {
+                $("#cmbSexos").focus();
+                toastMessage('warning', 'El sexo es obligatorio');
+                return false;
+            }
+           
+            return true;
+        }
+       
+
+        function guardarUser() {
+
+            if (validarForm()) {
+                let parametro = {
+                    Nombre: $("#txtName").val(),
+                    Fecha_Nacimiento: $("#txtDateBorn").val(),
+                    Sexo: $("#cmbSexos").val(),
+                };
+                if (idUser == '') {
+                    modalProcesando(true);
+                    console.log('Prueba Insertar');
+                    $.ajax({
+                        url: '@Url.Action("InsertUser", "User")',
+                        method: 'POST',
+                        data: {
+                            userInsert: parametro,
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            modalProcesando(false);
+                            console.log(data);
+                            if (data.isSuccess) {
+                                closeModal('modalUsers');
+                                limpiarForm();
+                                toastMessage('success', data.message);
+                                getAllUser();
+                            } else {
+                                toastMessage('error', data.message);
+                            }
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            modalProcesando(false);
+                            console.error(xhr, textStatus, errorThrown);
+                            swaMessage(xhr.status, xhr.responseJSON.message);
+                        }
+                    });
+                } else {
+                    parametro.IdUser = idUser;
+                    modalProcesando(true);
+                    $.ajax({
+                        url: '@Url.Action("UpdateUser", "User")',
+                        method: 'PUT',
+                        data: {
+                            updateUser: parametro,
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            modalProcesando(false);
+                            if (data.isSuccess) {
+                                closeModal('modalUsers');
+                                limpiarForm();
+                                toastMessage('success', data.message);
+                                getAllUser();
+                            } else {
+                                toastMessage('error', data.message);
+                            }
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            modalProcesando(false);
+                            console.error(xhr, textStatus, errorThrown);
+                            swaMessage(xhr.status, xhr.responseJSON.message);
+                        }
+                    });
+                }
+            }
+        }
+
+        function editarUser(idUserr) {
+            console.log(idUserr);
+            limpiarForm();
+            idUser = idUserr;
+
+            let userSelect = listaUsers.find(x => x.idUser == idUser);
+            
+            //select data
+            //$('#cmbFichas').val(userSelect.listIdFichas).trigger('change');
+
+            $("#txtName").val(userSelect.nombre);
+            //Formateando Fecha Nacimiento
+            let fechaNacimiento = userSelect.fecha_Nacimiento;
+            console.log(fechaNacimiento);
+            var fecha = new Date(fechaNacimiento); //Fecha actual
+            var mes = fecha.getMonth() + 1; //obteniendo mes
+            var dia = fecha.getDate(); //obteniendo dia
+            var ano = fecha.getFullYear(); //obteniendo año
+            if (dia < 10)
+                dia = '0' + dia; //agrega cero si el menor de 10
+            if (mes < 10)
+                mes = '0' + mes; //agrega cero si el menor de 10
+            document.getElementById('txtDateBorn').value = ano + "-" + mes + "-" + dia;
+            $("#cmbSexos").val(userSelect.sexo).trigger('change');
+            //document.getElementById('cmbSexos').value = userSelect.sexo;
+            //console.log(userSelect.sexo);
+            //const $select = document.querySelector("#cmbSexos");
+            //let sex = userSelect.sexo;
+            //$("#cmbSexos").val($select);
+            //console.log(userSelect.sexo);
+            $("#idTituloModalUsers").html('Editar Usuario');
+           
+            const modal = new bootstrap.Modal('#modalUsers', {
+                keyboard: true
+            });
+            modal.show();
+        }
+        function eliminarUser(idUserr) {
+            console.log('Prueba Eliminar');
+            console.log(idUserr);
+            Swal.fire({
+                title: '¿Confirmar Eliminacion?',
+                text: "No podrás revertir esto.!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Si, Eliminar!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    modalProcesando(true);
+                    $.ajax({
+                        url: '@Url.Action("DeleteUser", "User")',
+                        method: 'DELETE',
+                        data: {
+                            idUser: idUserr,
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            modalProcesando(false);
+                            if (data.isSuccess) {
+                                toastMessage('success', data.message);
+                                getAllUser();
+                            } else {
+                                toastMessage('error', data.message);
+                            }
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            modalProcesando(false);
+                            console.error(xhr, textStatus, errorThrown);
+                            swaMessage(xhr.status, xhr.responseJSON.message);
+                        }
+                    });
+                }
+
+            });
+
+
+
+        }
+        function getAllSexos(){
+            $.ajax({
+                url: '@Url.Action("GetSexo", "User")',
+                method: 'GET',
+                dataType: "json",
+                success: function (data) {
+                    modalProcesando(false);
+                    console.log(data);
+                    if (data.isSuccess) {
+                        listaSexos = data.result;
+                        console.log(listaSexos);
+                        loadAllSexos(listaSexos);
+                    } else {
+                        Swal.fire(
+                            'Opps!',
+                            data.message,
+                            'error');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    modalProcesando(false);
+                    toastMessage('error', 'Hubo un error al cargar Sexos, por favor intentarlo nuevamente!');
+                    console.error(xhr, textStatus, errorThrown);
+                }
+            });
+        }
+        function selectSexo(){
+                var combo = document.getElementById("cmbSexos");
+                let selected = combo.options[combo.selectedIndex].value;
+                let text = combo.options[combo.selectedIndex].text;
+                sexoValue = selected;
+        }
+        function loadAllSexos(data, selected) {
+            $("#cmbSexos").empty();
+            $("#cmbSexos").append('<option value="" disabled selected>Seleccione un Sexo</option>');
+            $.each(data, function (i, lista) {
+                if (data[i].value == selected) {
+                    $("#cmbSexos").append('<option style="cursor:pointer;"  data-toggle="tooltip" data-placement="top" title="' + data[i].text + '" value="' + data[i].value + '"selected>' + data[i].text + '</option>');
+                } else {
+                    $("#cmbSexos").append('<option style="cursor:pointer;"  data-toggle="tooltip" data-placement="top" title="' + data[i].text + '" value="' + data[i].value + '">' + data[i].text + '</option>');
+                }
+            });
+        }
+    </script>
+}

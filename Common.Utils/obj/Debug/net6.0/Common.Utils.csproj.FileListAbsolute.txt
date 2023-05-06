@@ -1,0 +1,15 @@
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\Common.Utils\bin\Debug\net6.0\Common.Utils.deps.json
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\Common.Utils\bin\Debug\net6.0\Common.Utils.dll
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\Common.Utils\bin\Debug\net6.0\Common.Utils.pdb
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\Common.Utils\obj\Debug\net6.0\Common.Utils.csproj.AssemblyReference.cache
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\Common.Utils\obj\Debug\net6.0\Common.Utils.Resources.ResorcesStatementSQL.resources
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\Common.Utils\obj\Debug\net6.0\Common.Utils.csproj.GenerateResource.cache
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\Common.Utils\obj\Debug\net6.0\Common.Utils.GeneratedMSBuildEditorConfig.editorconfig
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\Common.Utils\obj\Debug\net6.0\Common.Utils.AssemblyInfoInputs.cache
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\Common.Utils\obj\Debug\net6.0\Common.Utils.AssemblyInfo.cs
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\Common.Utils\obj\Debug\net6.0\Common.Utils.csproj.CoreCompileInputs.cache
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\Common.Utils\obj\Debug\net6.0\Common.Utils.dll
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\Common.Utils\obj\Debug\net6.0\refint\Common.Utils.dll
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\Common.Utils\obj\Debug\net6.0\Common.Utils.pdb
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\Common.Utils\obj\Debug\net6.0\ref\Common.Utils.dll
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\Common.Utils\obj\Debug\net6.0\Common.Utils.Resources.GeneralMessages.resources

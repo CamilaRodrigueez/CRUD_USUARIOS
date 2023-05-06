@@ -1,0 +1,54 @@
+﻿@model ProyectoWeb.Domain.ViewModel.UserMV
+@using Common.Utils.Const;
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form method="post">
+    <div class="border p-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input hidden asp-for="@Model.User.viewDiff" value="true" />
+        <div class="form-group row">
+            <h2 class="text-info pl-3"> Nuevo Usuario</h2>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <label asp-for="User.Nombre" class="form-label">Nombre Usuario</label>
+                    <input asp-for="User.Nombre" class="form-control" id="txtName" required />
+                    <span asp-validation-for="User.Nombre" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label asp-for="User.Fecha_Nacimiento" class="form-label">Fecha Nacimiento</label>
+                    <input asp-for="User.Fecha_Nacimiento" id="txtDateBorn" class="form-control" type="date" required value="@Model.User.StrFecha_Nacimiento" />
+                    <span asp-validation-for="User.Fecha_Nacimiento" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label asp-for="User.Sexo" class="form-label">Sexo</label>
+                    <select asp-for="User.Sexo" asp-items="@Model.ListSexos" class="form-select" id="cmbSexos" required>
+                                <option disabled selected>--Selecione un Sexo </option>
+                     </select>
+                    <span asp-validation-for="User.Sexo" class="text-danger"></span>
+                </div>
+            </div>
+            <br />
+            <div class="d-grid grap-2 d-md-block">
+                <button type="submit" onclick="return varlidarDatos()" class="btn btn-success">Crear Usuario</button>
+                <a asp-controller="User" asp-action="Index" class="btn btn-secondary">Regresar</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        //<partial name="_ValidationScriptsPartial"/>
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

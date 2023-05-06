@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ProyectoWeb</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ProyectoWeb.styles.css" asp-append-version="true" />
+    @*Librería fontawesome*@
+    <link rel="stylesheet" href="~/lib/fontawesome/css/all.css" asp-append-version="true" />
+
+    @*data table*@
+    <link rel="stylesheet" href="~/lib/datatables/datatables.min.css">
+    <link rel="stylesheet" href="~/lib/datatables/Buttons-2.3.3/css/buttons.bootstrap5.min.css">
+    <link rel="stylesheet" href="~/lib/datatables/DataTables-1.13.1/css/dataTables.bootstrap5.min.css">
+    @*toastr*@
+   <link href="~/lib/toastr/css/toastr.min.css" rel="stylesheet" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="Index">Proyecto Web</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1 ">
+                       @* <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>*@
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="User" asp-action="Create">Usuario</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="User" asp-action="Index">Usuario Consulta</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            <partial name="_Notificaciones" />
+            @RenderBody()
+        </main>
+    </div>
+
+   <div class="modal fade" id="container-modal-procesando" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body" style="text-align:center;font-weight:bold">
+                    <p id="mensaje-modal-procesando">Por favor espere</p>
+                    <div align="center"><img width="100%" src="~/img/cargando.gif"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="border-top footer  bg-black">
+        <div class="container text-white">
+            &copy; 2023 - Proyecto Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @*dataTable*@
+    <script src="~/lib/datatables/datatables.min.js"></script>
+    <script src="~/lib/datatables/Buttons-2.3.3/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/lib/datatables/DataTables-1.13.1/js/dataTables.bootstrap5.min.js"></script>
+    @*toastr*@
+    <script src="~/lib/toastr/js/toastr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.3.6/dist/sweetalert2.all.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+<script>
+    //**CONFIGURACIÓN TOASTR */
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+    function modalProcesando(desplegar, titulo) {
+        if (desplegar) {
+            if (titulo != undefined && titulo != null) {
+                $("#mensaje-modal-procesando").html(titulo);
+            }
+            else {
+                $("#mensaje-modal-procesando").html('Por favor espere');
+            }
+            const modalProcesando = new bootstrap.Modal('#container-modal-procesando', {
+                keyboard: false
+            });
+            modalProcesando.show();
+        } else {
+            //console.log('se cierra modal');
+            setTimeout(function () {
+                $('.modal-backdrop').css("display", "none");
+
+                const truck_modal = document.querySelector('#container-modal-procesando');
+                const modal = bootstrap.Modal.getInstance(truck_modal);
+                modal.hide();
+                //closeModal('container-modal-procesando');
+            }, 700);
+            //$('.modal-backdrop').css("display", "none");
+            // closeModal('container-modal-procesando');
+
+
+        }
+    }
+    function soloLetras(e) {
+        var key = e.keyCode || e.which,
+            tecla = String.fromCharCode(key).toLowerCase(),
+            letras = " áéíóúabcdefghijklmnñopqrstuvwxyz",
+            especiales = [8, 37, 39],
+            tecla_especial = false;
+
+        for (var i in especiales) {
+            if (key == especiales[i]) {
+                tecla_especial = true;
+                break;
+            }
+        }
+
+        if (letras.indexOf(tecla) == -1 && !tecla_especial) {
+            return false;
+        }
+    }
+ 
+    function toastMessage(type, message) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        Toast.fire({
+            icon: type,
+            title: message
+        });
+    }
+
+    function closeModal(modalName) {
+        const truck_modal = document.querySelector('#' + modalName);
+        const modal = bootstrap.Modal.getInstance(truck_modal);
+        modal.hide();
+    }
+
+    function swaMessage(statusCode,message){
+         console.log(statusCode)
+         if (statusCode == 200) {
+             Swal.fire('¡Bien!!',message,'success');
+         } else if (statusCode == 400){
+             Swal.fire('¡Alerta!',message,'warning');
+         }else{
+             Swal.fire('¡Opps!',message,'error');
+         }
+     }
+</script>
