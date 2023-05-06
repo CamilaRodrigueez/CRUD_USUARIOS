@@ -50,7 +50,7 @@ namespace ProyectoWeb.Domain.Services
                     StrFecha_Nacimiento = CapitalizeFirstLetter( x.Fecha_Nacimiento.ToString("MMMM - dd, yyyy")),
                     Fecha_Nacimiento = x.Fecha_Nacimiento,
                     Sexo = x.Sexo,
-                    SexoGeneral = x.Sexo.Equals("F")? "Femenino" :"Masculino",
+                    SexoGeneral = x.Sexo.ToLower().Equals("f")? "Femenino" :"Masculino",
                 }).ToList();
 
                 return listUserDto;
@@ -69,16 +69,8 @@ namespace ProyectoWeb.Domain.Services
 
             if (userInsert.Fecha_Nacimiento > DateTime.Now)
             {
-                if (Convert.ToBoolean(userInsert?.viewDiff))
-                {
-                    response.Message = GeneralMessages.DateInvalid;
-                    response.IsSuccess = false;
-                    return response;
-                }
-                else
-                {
-                  throw new BusinessException(GeneralMessages.DateInvalid);
-                }
+                response.Message = GeneralMessages.DateInvalid;
+                return response;
             }
                 
             
@@ -105,7 +97,11 @@ namespace ProyectoWeb.Domain.Services
             string query = ResorcesStatementSQL.SP_Update;
 
             if (updateUser.Fecha_Nacimiento > DateTime.Now)
-                throw new BusinessException(GeneralMessages.DateInvalid);
+            {
+                response.Message = GeneralMessages.DateInvalid;
+
+                return response;
+            }
 
             var requet = new
             {   
@@ -121,6 +117,7 @@ namespace ProyectoWeb.Domain.Services
             if (response.IsSuccess)
                 response.Message = GeneralMessages.ItemUpdated;
             else response.Message = GeneralMessages.ItemNoUpdated;
+
             return response;
         }
 

@@ -318,7 +318,6 @@ D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\bin\Debug\net6.0\Microso
 D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\bin\Debug\net6.0\Microsoft.CodeAnalysis.Workspaces.MSBuild.dll
 D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\bin\Debug\net6.0\Microsoft.Data.SqlClient.dll
 D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\bin\Debug\net6.0\Microsoft.DiaSymReader.dll
-D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\bin\Debug\net6.0\Microsoft.DotNet.PlatformAbstractions.dll
 D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\bin\Debug\net6.0\Microsoft.DotNet.Scaffolding.Shared.dll
 D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
 D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\bin\Debug\net6.0\Microsoft.Identity.Client.dll
@@ -566,3 +565,12 @@ D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\obj\Debug\net6.0\refint\
 D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\obj\Debug\net6.0\ProyectoWeb.pdb
 D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\obj\Debug\net6.0\ProyectoWeb.genruntimeconfig.cache
 D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\obj\Debug\net6.0\ref\ProyectoWeb.dll
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\bin\Debug\net6.0\Serilog.dll
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\bin\Debug\net6.0\Serilog.AspNetCore.dll
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\bin\Debug\net6.0\Serilog.Extensions.Hosting.dll
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\bin\Debug\net6.0\Serilog.Extensions.Logging.dll
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\bin\Debug\net6.0\Serilog.Formatting.Compact.dll
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\bin\Debug\net6.0\Serilog.Settings.Configuration.dll
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\bin\Debug\net6.0\Serilog.Sinks.Console.dll
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\bin\Debug\net6.0\Serilog.Sinks.Debug.dll
+D:\PruebasTecnicas\ProyectoWebPruebaTecnica\ProyectoWeb\bin\Debug\net6.0\Serilog.Sinks.File.dll

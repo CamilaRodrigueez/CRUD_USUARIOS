@@ -21,7 +21,7 @@ namespace ProyectoWeb.Domain.Dto
         [Required(ErrorMessage = "El sexo es obligatorio")]
         public string Sexo { get; set; }
         public string SexoGeneral { get; set; }
-        public string viewDiff { get; set; } 
+       
 
     }
 }

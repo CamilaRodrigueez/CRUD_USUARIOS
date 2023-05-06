@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ProyectoWeb.Domain.Dto;
+using Serilog;
 
 namespace ProyectoWeb.Handlers
 {
@@ -18,33 +19,28 @@ namespace ProyectoWeb.Handlers
         public override void OnException(ExceptionContext context)
         {
 
-            HttpResponseException responseExeption = new HttpResponseException();
-
-
-            ResponseDto response = new ResponseDto();
-
-            if (context.Exception is BusinessException)
+            HttpResponseException responseExeption = new HttpResponseException()
             {
-                responseExeption.Status = StatusCodes.Status400BadRequest;
-                response.Message = context.Exception.Message;
-                context.ExceptionHandled = true;
-            }
-            else
-            {
-                response.Result = JsonConvert.SerializeObject(context.Exception);
-                responseExeption.Status = StatusCodes.Status500InternalServerError;
-                response.Message = GeneralMessages.Error500;
-                context.ExceptionHandled = true;
+                Status = StatusCodes.Status500InternalServerError
+            };
 
-                // add log Exception
-                //_permissionServices.ValidatePermissionByUser(Common.Utils.Enums.Enums.Permission.ActualizarCategoria, 2);
-            }
+            ResponseDto response = new ResponseDto()
+            {
+                Result = JsonConvert.SerializeObject(context.Exception),
+                Message = GeneralMessages.Error500
+
+            };
+
+            context.ExceptionHandled = true;
+
 
             context.Result = new ObjectResult(responseExeption.Value)
             {
                 StatusCode = responseExeption.Status,
                 Value = response
             };
+
+            Log.Fatal(context.Exception, GeneralMessages.Error500);
 
             if (responseExeption.Status == StatusCodes.Status500InternalServerError)
                 context.HttpContext.Response.HttpContext.Features.Get<IHttpResponseFeature>().ReasonPhrase = "Ha ocurrido un error";

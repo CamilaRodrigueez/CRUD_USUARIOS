@@ -193,12 +193,9 @@
             }
 
         function nuevoUsuario() {
-            //limpiarForm();
-
-            const modalUSer = new bootstrap.Modal('#modalUsers', {
-                keyboard: true
-            });
-            modalUSer.show();
+           
+            window.location.href = "User/Create";
+            
         }
         function validarForm() {
 
@@ -364,6 +361,7 @@
 
 
         }
+
         function getAllSexos(){
             $.ajax({
                 url: '@Url.Action("GetSexo", "User")',
@@ -390,12 +388,14 @@
                 }
             });
         }
+
         function selectSexo(){
                 var combo = document.getElementById("cmbSexos");
                 let selected = combo.options[combo.selectedIndex].value;
                 let text = combo.options[combo.selectedIndex].text;
                 sexoValue = selected;
         }
+
         function loadAllSexos(data, selected) {
             $("#cmbSexos").empty();
             $("#cmbSexos").append('<option value="" disabled selected>Seleccione un Sexo</option>');

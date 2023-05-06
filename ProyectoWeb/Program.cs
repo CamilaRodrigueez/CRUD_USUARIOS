@@ -1,13 +1,24 @@
 using ProyectoWeb.Handlers;
+using Serilog;
 using System.Text.Json.Serialization;
 
+
 var builder = WebApplication.CreateBuilder(args);
+#region Logs
+builder.Host.UseSerilog((hostContext, services, configuration) =>
+{
+configuration.WriteTo.Console();
+configuration.MinimumLevel.Warning();
+configuration.WriteTo.File("Logs/LogWeb.txt", rollingInterval: RollingInterval.Day);
+}); 
+#endregion
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 //Inyeccion de Dependecia
-#region Inyection
+#region Inyeccion Dependencia
 DependencyInyectionHandler.DependencyInyectionConfig(builder.Services);
 #endregion
 
