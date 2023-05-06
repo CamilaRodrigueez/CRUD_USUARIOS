@@ -34,12 +34,12 @@ namespace ProyectoWeb.Domain.Services
         #region Methods
         public async Task<List<UserDto>> GetAllUsers()
         {
-            List <UserDto> listUserDto = new List<UserDto>();
+            List<UserDto> listUserDto = new List<UserDto>();
             string query = ResorcesStatementSQL.SP_Select;
 
 
             DapperHelper.Instancia.ConnectionString = _config.GetConnectionString(Constants.NAME_CONEXION);
-            IEnumerable<UserDto> lista = await DapperHelper.Instancia.ExecuteQuerySelect<UserDto>(query, null);
+            IEnumerable<UserEntity> lista = await DapperHelper.Instancia.ExecuteQuerySelect<UserEntity>(query, null);
 
             if (lista.Any())
             {

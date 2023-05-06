@@ -13,9 +13,6 @@
             <button class="btn btn-primary buttonTitle me-1" onclick="nuevoUsuario()">
                 <i class="fa-solid fa-user-plus"></i> Nuevo Usuario
             </button>
-            @*<a  class="btn btn-primary">
-                <i class="fa-solid fa-user-plus"></i>   Nuevo Usuario
-            </a>*@
         </div>
     </div>
     <br/>
@@ -117,8 +114,7 @@
     <script type="text/javascript" charset="utf-8">
         var listaUsers = [];
         var listaSexos = [];
-        //const client_token = "@ViewBag.ClientToken";
-        //console.log(listaSexos);
+       
         let idUser = '';
         let sexo = '';
         let sexoValue ='';
@@ -301,9 +297,6 @@
             idUser = idUserr;
 
             let userSelect = listaUsers.find(x => x.idUser == idUser);
-            
-            //select data
-            //$('#cmbFichas').val(userSelect.listIdFichas).trigger('change');
 
             $("#txtName").val(userSelect.nombre);
             //Formateando Fecha Nacimiento
@@ -319,12 +312,7 @@
                 mes = '0' + mes; //agrega cero si el menor de 10
             document.getElementById('txtDateBorn').value = ano + "-" + mes + "-" + dia;
             $("#cmbSexos").val(userSelect.sexo).trigger('change');
-            //document.getElementById('cmbSexos').value = userSelect.sexo;
-            //console.log(userSelect.sexo);
-            //const $select = document.querySelector("#cmbSexos");
-            //let sex = userSelect.sexo;
-            //$("#cmbSexos").val($select);
-            //console.log(userSelect.sexo);
+
             $("#idTituloModalUsers").html('Editar Usuario');
            
             const modal = new bootstrap.Modal('#modalUsers', {
